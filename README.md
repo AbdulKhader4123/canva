@@ -1,15 +1,5 @@
 # Canva
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
-
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
-
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
-
-## Finish your CI setup
-
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/wyd0ui2fi5)
-
 
 ## Run tasks
 
@@ -31,6 +21,13 @@ To see all available targets to run for a project, run:
 npx nx show project canva
 ```
 
+To add Tailwind CSS to an existing Angular application, buildable library or publishable library, run:
+
+```sh
+npx nx g @nx/angular:setup-tailwind canva
+```
+(https://nx.dev/recipes/angular/using-tailwind-css-with-angular-projects)
+
 These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
 
 [More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
@@ -51,6 +48,7 @@ To generate a new library, use:
 
 ```sh
 npx nx g @nx/angular:lib mylib
+ nx g @nx/angular:library libs/ui-navigation --tags=ui    
 ```
 
 You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
