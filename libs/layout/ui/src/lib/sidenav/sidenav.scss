@@ -1,0 +1,17 @@
+:host ::ng-deep {
+    .p-menu{
+        min-width: unset;
+        width: 65px;
+        border: none;
+        border-right: 1px solid rgba(74,46,126,.15);
+        padding-top: 10px;
+    }
+    .p-menu-item-link{
+        padding-left: 0;
+        padding-right: 0;
+        gap: 5px;
+    }
+}
+img.menu-svg{
+filter: invert(31%) sepia(38%) saturate(6012%) hue-rotate(251deg) brightness(97%) contrast(109%);
+}

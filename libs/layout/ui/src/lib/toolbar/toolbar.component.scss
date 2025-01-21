@@ -1,0 +1,10 @@
+:host ::ng-deep {
+    .p-menu{
+        min-width: unset;
+        width: 80px;
+    }
+    .p-menu-item-link{
+        padding-left: 0;
+        padding-right: 0;
+    }
+}

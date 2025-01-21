@@ -1,0 +1,6 @@
+.design-item{
+    transition: transform .1s ease;
+    &:hover{
+        transform: scale(1.05);
+    }
+}
