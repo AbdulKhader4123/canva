@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "lint": "nx affected --target=lint",
     "start": "nx serve canva --configuration=development",
     "build": "nx build canva"
   },

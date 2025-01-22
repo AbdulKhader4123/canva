@@ -4,7 +4,7 @@
   "sourceRoot": "libs/layout/models/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:feature", "domain:view-builder"],
+  "tags": ["type:feature", "domain:layout"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
