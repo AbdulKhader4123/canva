@@ -2,15 +2,16 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SidebarComponent } from '@canva/layout/ui';
 import { CommonModule } from '@angular/common';
+import { FullHeightDirective } from '@canva/shared/utils';
 
 @Component({
   selector: 'layout-feature',
-  imports: [SidebarComponent, RouterModule, CommonModule],
+  imports: [SidebarComponent, RouterModule, CommonModule, FullHeightDirective],
   template: `
-    <div class="flex h-full" [ngClass]="containerClass">
+    <div fullHeight [flexDirection]="'row'" [ngClass]="containerClass">
       <layout-sidebar />
-      <div class="layout-main-container flex-1">
-        <div class="layout-main">
+      <div flexChild class="layout-main-container">
+        <div class="layout-main h-full">
           <router-outlet></router-outlet>
         </div>
       </div>
