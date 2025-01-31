@@ -19,6 +19,7 @@
         "libs/design/feature-create-design/src/index.ts"
       ],
       "@canva/design/ui": ["libs/design/ui/src/index.ts"],
+      "@canva/design/models": ["libs/design/models/src/index.ts"],
       "@canva/layout/data-access": ["libs/layout/data-access/src/index.ts"],
       "@canva/layout/feature-layout": [
         "libs/layout/feature-layout/src/index.ts"
@@ -28,9 +29,9 @@
       ],
       "@canva/layout/models": ["libs/layout/models/src/index.ts"],
       "@canva/layout/ui": ["libs/layout/ui/src/index.ts"],
-      "@canva/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@canva/shared/models": ["libs/shared/models/src/index.ts"],
-      "@canva/shared/ui": ["libs/shared/ui/src/index.ts"]
+      "@canva/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@canva/shared/utils": ["libs/shared/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
