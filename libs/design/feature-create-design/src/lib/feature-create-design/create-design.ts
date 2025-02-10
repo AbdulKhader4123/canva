@@ -1,18 +1,21 @@
 import {
   Component,
   ElementRef,
-  Input,
   OnInit,
   viewChild,
   ViewContainerRef,
   OnDestroy,
+  inject,
+  input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '@canva/shared/ui';
 import { FullHeightDirective } from '@canva/shared/utils';
-import { ToolbarComponent } from '@canva/design/ui';
+import { ToolbarComponent } from './toolbar/toolbar';
 import * as fabric from 'fabric';
 import { debounceTime, Subject } from 'rxjs';
+import { CanvasFacadeService } from '@canva/design/data-access';
+import { TextEditorComponent } from './textEditor/textEditor';
 
 @Component({
   selector: 'design-feature',
@@ -21,6 +24,7 @@ import { debounceTime, Subject } from 'rxjs';
     HeaderComponent,
     ToolbarComponent,
     FullHeightDirective,
+    TextEditorComponent,
   ],
   styles: [
     `
@@ -34,13 +38,14 @@ import { debounceTime, Subject } from 'rxjs';
   template: `
     <div fullHeight>
       <shared-header />
-      <div class="temp" fullHeight [flexDirection]="'row'">
+      <div fullHeight [flexDirection]="'row'" class="relative">
         <design-toolbar />
         <div
-          flexChild
           #workSpaceHolder
+          flexChild
           class="flex justify-center items-center work-space-holder"
         >
+          <design-text-editor />
           <canvas id="fabricSurface"></canvas>
         </div>
       </div>
@@ -48,32 +53,49 @@ import { debounceTime, Subject } from 'rxjs';
   `,
 })
 export class FeatureCreateDesignComponent implements OnInit, OnDestroy {
-  @Input() design = '';
+  design = input('');
   vcr = viewChild('workSpaceHolder', { read: ViewContainerRef });
   workSpaceHolder = viewChild('workSpaceHolder', { read: ElementRef });
 
   private resizeObserver!: ResizeObserver;
   private resizeSubject = new Subject<{ width: number; height: number }>();
-  private canvas!: fabric.Canvas;
   private initialCanvasWidth!: number;
   private initialCanvasHeight!: number;
   private initialDimensionsSet = false;
 
+  public canvasFacadeService = inject(CanvasFacadeService);
+
   ngOnInit() {
-    this.canvas = this.initializeCanvas();
+    const canvas = this.canvasFacadeService.initializeCanvas();
+    setTimeout(() => {
+      const workSpaceHolder = this.workSpaceHolder()?.nativeElement;
+      const { width, height } = workSpaceHolder.getBoundingClientRect();
+      this.updateCanvasDimensions(canvas, width * 0.9, height * 0.7);
+    });
     this.initializeResizeObserver();
-    this.subscribeToResizeEvents();
-    this.addText(this.canvas);
+    this.subscribeToResizeEvents(canvas);
+    this.updateObjectLocation(canvas);
+
+    canvas.on('selection:created', (e) => this.handleSelection(e));
+    canvas.on('selection:updated', (e) => this.handleSelection(e));
+
+    // Listen for object deselection
+    canvas.on('selection:cleared', () => {
+      this.canvasFacadeService.setSelectedObjects([]);
+    });
   }
 
-  initializeCanvas() {
-    const canvas = new fabric.Canvas('fabricSurface', {
-      backgroundColor: '#ebebef',
-      preserveObjectStacking: true,
-    });
+  handleSelection(e: any) {
+    const selectedObjects = e.selected;
+    this.canvasFacadeService.setSelectedObjects(selectedObjects);
+  }
 
-    this.updateCanvasDimensions(canvas, window.innerWidth, window.innerHeight);
-    return canvas;
+  showTextEditor() {
+    // Show the text editor at the top of the screen
+    const textEditor = document.getElementById('textEditor');
+    if (textEditor) {
+      textEditor.style.display = 'block';
+    }
   }
 
   initializeResizeObserver() {
@@ -94,22 +116,20 @@ export class FeatureCreateDesignComponent implements OnInit, OnDestroy {
     height: number
   ): void {
     if (!this.initialDimensionsSet) {
-      this.initialCanvasWidth = width * 0.8;
-      this.initialCanvasHeight = height * 0.7;
+      this.initialCanvasWidth = width;
+      this.initialCanvasHeight = height;
       this.initialDimensionsSet = true;
     }
 
     const scaleX = width / this.initialCanvasWidth;
     const scaleY = height / this.initialCanvasHeight;
 
-    canvas.setDimensions({ width: width * 0.8, height: height * 0.7 });
-    console.log(scaleX);
+    canvas.setDimensions({ width: width, height: height });
     canvas.getObjects().forEach((obj) => {
       const initialScaleX = obj.get('initialScaleX') || obj.scaleX || 1;
       const initialScaleY = obj.get('initialScaleY') || obj.scaleY || 1;
       const initialLeft = obj.get('initialLeft') || obj.left || 0;
       const initialTop = obj.get('initialTop') || obj.top || 0;
-
       obj.set({
         scaleX: initialScaleX * scaleX,
         scaleY: initialScaleY * scaleY,
@@ -122,28 +142,30 @@ export class FeatureCreateDesignComponent implements OnInit, OnDestroy {
     canvas.renderAll();
   }
 
-  addText(canvas: fabric.Canvas): void {
-    const text = new fabric.Textbox('Hello World', {
-      width: 200,
-      height: 100,
-      fontSize: 24,
-      cursorColor: 'blue',
-      left: 498,
-      top: 225,
+  subscribeToResizeEvents(canvas: fabric.Canvas): void {
+    this.resizeSubject.pipe(debounceTime(50)).subscribe(({ width, height }) => {
+      this.updateCanvasDimensions(canvas, width * 0.9, height * 0.7);
     });
-    text.set({
-      initialScaleX: text.scaleX,
-      initialScaleY: text.scaleY,
-      initialLeft: text.left,
-      initialTop: text.top,
-    });
-    canvas.add(text);
   }
 
-  subscribeToResizeEvents(): void {
-    this.resizeSubject.pipe(debounceTime(50)).subscribe(({ width, height }) => {
-      this.updateCanvasDimensions(this.canvas, width, height);
+  updateObjectLocation(canvas: fabric.Canvas) {
+    canvas.on('object:modified', (e) => {
+      const obj = e.target;
+      if (obj) {
+        obj.set({
+          initialLeft: obj.left,
+          initialTop: obj.top,
+        });
+      }
     });
+  }
+
+  undo() {
+    this.canvasFacadeService.undo();
+  }
+
+  redo() {
+    this.canvasFacadeService.redo();
   }
 
   ngOnDestroy() {

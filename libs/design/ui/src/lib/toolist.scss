@@ -1,0 +1,33 @@
+.text-button{
+    outline: 1px solid var(--p-surface-0);
+    display: block;
+    width: 100%;
+    border-radius: 4px;
+    text-align: left;
+    color: var(--color-black);
+}
+
+.group-heading{
+    color: var(--color-black);
+    font-weight: 600;
+    opacity: 0.8;
+}
+
+.text-heading{
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 28px;
+    padding: 18px 10px;
+}
+.text-subheading{
+    font-weight: 700;
+    font-size: 16.8px;
+    line-height: 16.8px;
+    padding: 18px 10px;
+}
+.text-body{
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+    padding: 16px 10px;
+}

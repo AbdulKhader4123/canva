@@ -15,11 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@canva/design/data-access": ["libs/design/data-access/src/index.ts"],
       "@canva/design/feature-create-design": [
         "libs/design/feature-create-design/src/index.ts"
       ],
-      "@canva/design/ui": ["libs/design/ui/src/index.ts"],
       "@canva/design/models": ["libs/design/models/src/index.ts"],
+      "@canva/design/ui": ["libs/design/ui/src/index.ts"],
       "@canva/layout/data-access": ["libs/layout/data-access/src/index.ts"],
       "@canva/layout/feature-layout": [
         "libs/layout/feature-layout/src/index.ts"

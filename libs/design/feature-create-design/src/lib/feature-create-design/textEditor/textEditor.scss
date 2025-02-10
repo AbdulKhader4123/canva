@@ -1,0 +1,43 @@
+.text-editor-card{
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    left: 0;
+}
+
+::ng-deep {
+    .text-editor-card{
+        .p-card{
+            box-shadow: none;
+        }
+        .p-card-body{
+            background-color: var(--p-surface-100);
+        }
+        .p-card-content{
+            display: flex;
+            justify-content: center;
+        }
+    }
+    p-inputnumber {
+        height: 32px;
+        input{
+        text-align: center;
+        }
+    }
+}
+
+.text-color-picker{
+    display: flex;
+    flex-direction: column;
+    width: 24px;
+}
+.card-container{
+    border-radius: 8px;
+    padding: 4px;
+    background: var(--color-white);
+    height: 40px;
+}
+.color-picker{
+   background-image: url(../../../../../../../apps/canva/public/img/text-color.png); 
+   background-size: 100% 100%;
+}

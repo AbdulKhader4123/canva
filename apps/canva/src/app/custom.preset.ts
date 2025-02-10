@@ -19,6 +19,9 @@ const customPreset = definePreset(Aura, {
     },
     colorScheme: {
       light: {
+        formField: {
+          background: '#ffffff',
+        },
         surface: {
           0: '#f0edf7',
         },

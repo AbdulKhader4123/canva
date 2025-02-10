@@ -1,11 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { Menu } from 'primeng/menu';
 import { CardModule } from 'primeng/card';
 import { FullHeightDirective } from '@canva/shared/utils';
-import { ToolistComponent } from '../toolist';
-import { MenuLabels } from '@canva/design/models';
+import { ToolistComponent } from '@canva/design/ui';
+import { MenuLabels, TextTypes } from '@canva/design/models';
+import { CanvasFacadeService } from '@canva/design/data-access';
+import * as fabric from 'fabric';
 
 @Component({
   selector: 'design-toolbar',
@@ -66,7 +68,8 @@ import { MenuLabels } from '@canva/design/models';
         class="popover-card h-full"
       >
         <design-toolist
-          [selectedMenu]="activeMenu() ? activeMenu : popoverMenu"
+          [selectedMenu]="activeMenu() ? activeMenu() : popoverMenu()"
+          (addText)="addText($event)"
         />
       </p-card>
     </div>
@@ -81,6 +84,7 @@ export class ToolbarComponent {
   activeMenu = signal('');
   popoverMenu = signal('');
   lastPopoverMenu = signal('');
+  canvasFacadeService = inject(CanvasFacadeService);
 
   customMenuToken = {
     colorScheme: {
@@ -117,5 +121,31 @@ export class ToolbarComponent {
       return;
     }
     this.activeMenu.set(label);
+  }
+
+  addText(textType: TextTypes) {
+    let text = '';
+    const options: Partial<fabric.Textbox> = {};
+
+    switch (textType) {
+      case TextTypes.HEADING:
+        text = 'Add a heading';
+        options.fontSize = 32;
+        break;
+      case TextTypes.SUBHEADING:
+        text = 'Add a subheading';
+        options.fontSize = 24;
+        break;
+      case TextTypes.BODY:
+        text = 'Add a little bit of body text';
+        options.fontSize = 16;
+        break;
+      case TextTypes.PARAGRAPH:
+      default:
+        text = 'Your paragraph text';
+        options.fontSize = 18;
+        break;
+    }
+    this.canvasFacadeService.addText(text, options);
   }
 }
