@@ -1,6 +1,6 @@
 import {
   Component,
-  Input,
+  input,
   OnInit,
   viewChild,
   ViewContainerRef,
@@ -15,11 +15,11 @@ import dashboardControls from '../configs/dashboard.config';
   template: `<ng-container #container> </ng-container> `,
 })
 export class FeatureViewBuilderComponent implements OnInit {
-  @Input() page = PageRoutes.dashboard;
+  page = input(PageRoutes.dashboard);
   vcr = viewChild('container', { read: ViewContainerRef });
 
   ngOnInit() {
-    const components = this.getComponentList(this.page);
+    const components = this.getComponentList(this.page());
     this.loadComponents(components);
   }
 

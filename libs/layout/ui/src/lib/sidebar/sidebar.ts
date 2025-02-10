@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidenavComponent } from '../sidenav/sidenav';
 import { ButtonModule } from 'primeng/button';
@@ -16,5 +16,5 @@ import { ButtonModule } from 'primeng/button';
   </div> `,
 })
 export class SidebarComponent {
-  @Input() editorMode = false;
+  editorMode = input(false);
 }
